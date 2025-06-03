@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using WebShopNovi.Models;
 using WebShopNovi.Services;
 
 namespace WebShopNovi.Controllers
@@ -20,6 +21,22 @@ namespace WebShopNovi.Controllers
         public IActionResult Create()
         {
             return View();
+        }
+
+        [HttpPost]
+        public IActionResult Create(ProductDto productDto)
+        {
+            if (productDto.ImageFile == null)
+            {
+                ModelState.AddModelError("ImageFile", "The image file is required");
+            }
+
+            if (!ModelState.IsValid)
+            {
+                return View(productDto);
+            }
+
+            return RedirectToAction("Index", "Products");
         }
     }
 }
