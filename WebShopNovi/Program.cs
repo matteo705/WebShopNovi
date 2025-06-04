@@ -36,6 +36,15 @@ builder.Services.AddSession(options =>
     options.Cookie.IsEssential = true;
 });
 
+builder.Services.AddSingleton<PayPalClient>(provider =>
+{
+    var config = builder.Configuration.GetSection("Paypal");
+    string clientId = config["ClientId"];
+    string secret = config["Secret"];
+    bool isSandBox = bool.Parse(config["IsSandbox"]);
+    return new PayPalClient(clientId, secret, isSandBox);
+});
+
 var app = builder.Build();
 
 using (var scope = app.Services.CreateScope())

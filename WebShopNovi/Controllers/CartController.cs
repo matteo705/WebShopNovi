@@ -7,6 +7,7 @@ using WebShopNovi.Models;
 using WebShopNovi.Services;
 using Microsoft.AspNetCore.Http;
 using WebShopNovi.Extensions;
+using System.Security.Claims;
 
 namespace WebShopNovi.Controllers
 {
@@ -119,7 +120,17 @@ namespace WebShopNovi.Controllers
             }
             return RedirectToAction("Index");
         }
-    }
 
-    
+        [HttpGet]
+        [Authorize(Roles = "User")]
+        public IActionResult Checkout()
+        {
+            var cart = GetCart();
+            if (cart == null || !cart.Any())
+            {
+                return RedirectToAction("Index");
+            }
+            return View(cart);
+        }
+    }
 }
