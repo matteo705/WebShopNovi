@@ -126,10 +126,12 @@ namespace WebShopNovi.Areas.Identity.Pages.Account
                     string role = "User";
 
                     if (!await _roleManager.RoleExistsAsync(role))
-                        {
+                    {
                         await _roleManager.CreateAsync(new IdentityRole(role));
                     }
-                    
+
+                    await _userManager.AddToRoleAsync(user, role);
+
                     _logger.LogInformation("User created a new account with password.");
 
                     var userId = await _userManager.GetUserIdAsync(user);

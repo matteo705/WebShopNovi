@@ -3,6 +3,9 @@
 
 <h2 class="text-center mb-5">List of products</h2>
 
+<p>Logged in as: @User.Identity.Name</p>
+<p>Is in role User? @User.IsInRole("User")</p>
+
 <div class="row mb-5">
     <div class="col">
         @if (User.IsInRole("Admin"))
@@ -46,6 +49,14 @@
                            asp-route-id="@product.Id">Edit</a>
                         <a class="btn btn-danger btn-sm" asp-controller="Products" asp-action="Delete"
                            asp-route-id="@product.Id" onclick="return confirm('Are you sure?')">Delete</a>
+                    }
+
+                    @if (User.IsInRole("User"))
+                    {
+                        <form asp-controller="Cart" asp-action="AddToCart" method="post" style="display:inline;">
+                            <input type="hidden" name="productId" value="@product.Id" />
+                            <button type="submit" class="btn btn-success btn-sm">Add to Cart</button>
+                        </form>
                     }
                 </td>
             </tr>
