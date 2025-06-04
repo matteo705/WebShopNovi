@@ -23,6 +23,7 @@ namespace WebShopNovi.Controllers
             return View(products);
         }
 
+        [Authorize(Roles = "Admin")]
         public IActionResult Create()
         {
             return View();
@@ -73,6 +74,7 @@ namespace WebShopNovi.Controllers
             return RedirectToAction("Index", "Products");
         }
 
+        [Authorize(Roles = "Admin")]
         public IActionResult Edit(int id)
         {
             var product = context.Products.Find(id);
@@ -152,6 +154,7 @@ namespace WebShopNovi.Controllers
             return RedirectToAction("Index", "Products");
         }
 
+        [Authorize(Roles = "Admin")]
         public IActionResult Delete(int id)
         {
             var product = context.Products.Find(id);
