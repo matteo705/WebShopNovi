@@ -1,9 +1,12 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using WebShopNovi.Models;
 using WebShopNovi.Services;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authorization;
 
 namespace WebShopNovi.Controllers
 {
+    [Authorize]
     public class ProductsController : Controller
     {
         private readonly ApplicationDbContext context;
