@@ -25,6 +25,7 @@
             <th>Name</th>
             <th>Brand</th>
             <th>Category</th>
+            <th>Description</th>
             <th>Price</th>
             <th>Image</th>
             <th>Created At</th>
@@ -39,6 +40,7 @@
                 <td>@product.Name</td>
                 <td>@product.Brand</td>
                 <td>@product.Category</td>
+                <td>@product.Description</td>
                 <td>@(product.Price)€</td>
                 <td><img src="/products/@product.ImageFileName" width=100 /></td>
                 <td>@product.CreatedAt.ToString("dd.MM.yyyy")</td>
@@ -47,8 +49,9 @@
                     {
                         <a class="btn btn-primary btn-sm" asp-controller="Products" asp-action="Edit"
                            asp-route-id="@product.Id">Edit</a>
-                        <a class="btn btn-danger btn-sm" asp-controller="Products" asp-action="Delete"
-                           asp-route-id="@product.Id" onclick="return confirm('Are you sure?')">Delete</a>
+                        <form asp-action="Delete" asp-route-id="@product.Id" method="post" style="display:inline;" onsubmit="return confirm('Are you sure?');">
+                            <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+                        </form>
                     }
 
                     @if (User.IsInRole("User"))

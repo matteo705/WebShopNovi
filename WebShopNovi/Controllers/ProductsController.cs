@@ -137,7 +137,10 @@ namespace WebShopNovi.Controllers
                 //delete old image
 
                 string oldImageFullPath = environment.WebRootPath + "/products/" + product.ImageFileName;
-                System.IO.File.Delete(imageFullPath);
+                if (System.IO.File.Exists(oldImageFullPath))
+                {
+                    System.IO.File.Delete(oldImageFullPath);
+                }
             }
 
             //update product
