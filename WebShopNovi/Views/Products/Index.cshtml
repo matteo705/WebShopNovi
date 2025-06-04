@@ -9,7 +9,6 @@
         <a class="btn btn-primary" asp-controller="Products" asp-action="Create">New Product</a>
     </div>
     <div class="col">
-
     </div>
 </div>
 
@@ -37,13 +36,14 @@
                 <td>@product.Category</td>
                 <td>@(product.Price)€</td>
                 <td><img src="/products/@product.ImageFileName" width=100 /></td>
-                <td>@product.CreatedAt.ToString("dd.mm.yyyy")</td>
+                <td>@product.CreatedAt.ToString("dd.MM.yyyy")</td>
                 <td style="white-space:nowrap">
                     <a class="btn btn-primary btn-sm" asp-controller="Products" asp-action="Edit"
                        asp-route-id="@product.Id">Edit</a>
                     <a class="btn btn-danger btn-sm" asp-controller="Products" asp-action="Delete"
-                       asp-route-id="@product.Id">Delete</a>
+                       asp-route-id="@product.Id" onclick="return confirm('Are you sure?')">Delete</a>
                 </td>
             </tr>
         }
     </tbody>
+</table>
