@@ -1,6 +1,23 @@
 ﻿@model List<Product>
 @using Microsoft.AspNetCore.Identity
 
+<style>
+    .table td img {
+        max-width: 100px;
+        height: auto;
+    }
+
+    .table td {
+        word-break: break-word;
+        white-space: normal;
+    }
+
+        /* Opciono: ograniči max širinu opisa */
+        .table td.description-cell {
+            max-width: 200px;
+        }
+</style>
+
 <h2 class="text-center mb-5">List of products</h2>
 
 <p>Logged in as: @User.Identity.Name</p>
@@ -13,56 +30,59 @@
             <a class="btn btn-primary" asp-controller="Products" asp-action="Create">New Product</a>
         }
     </div>
-    <div class="col">
-    </div>
 </div>
 
-
-<table class="table">
-    <thead>
-        <tr>
-            <th>ID</th>
-            <th>Name</th>
-            <th>Brand</th>
-            <th>Category</th>
-            <th>Description</th>
-            <th>Price</th>
-            <th>Image</th>
-            <th>Created At</th>
-            <th>Action</th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var product in Model)
-        {
+<div class="table-responsive">
+    <table class="table">
+        <thead>
             <tr>
-                <td>@product.Id</td>
-                <td>@product.Name</td>
-                <td>@product.Brand</td>
-                <td>@product.Category</td>
-                <td>@product.Description</td>
-                <td>@(product.Price)€</td>
-                <td><img src="/products/@product.ImageFileName" width=100 /></td>
-                <td>@product.CreatedAt.ToString("dd.MM.yyyy")</td>
-                <td style="white-space:nowrap">
-                    @if (User.IsInRole("Admin"))
-                    {
-                        <a class="btn btn-primary btn-sm" asp-controller="Products" asp-action="Edit"
-                           asp-route-id="@product.Id">Edit</a>
-                        <form asp-action="Delete" asp-route-id="@product.Id" method="post" style="display:inline;" onsubmit="return confirm('Are you sure?');">
-                            <button type="submit" class="btn btn-danger btn-sm">Delete</button>
-                        </form>
-                    }
-
-                    @if (User.IsInRole("User"))
-                    {
-                        <form asp-controller="Cart" asp-action="AddToCart" method="post" style="display:inline;">
-                            <input type="hidden" name="productId" value="@product.Id" />
-                            <button type="submit" class="btn btn-success btn-sm">Add to Cart</button>
-                        </form>
-                    }
-                </td>
+                <th>ID</th>
+                <th>Name</th>
+                <th>Brand</th>
+                <th>Category</th>
+                <th>Description</th>
+                <th>Price</th>
+                <th>Image</th>
+                <th>Created At</th>
+                <th>Action</th>
             </tr>
-        }
-    </tbody>
-</table>
+        </thead>
+        <tbody>
+            @foreach (var product in Model)
+            {
+                <tr>
+                    <td>@product.Id</td>
+                    <td>@product.Name</td>
+                    <td>@product.Brand</td>
+                    <td>@product.Category</td>
+                    <td class="description-cell">
+                        @(product.Description.Length > 60
+                                            ? product.Description.Substring(0, 60) + "..."
+                                            : product.Description)
+                </td>
+                <td>@(product.Price)€</td>
+                <td><img src="/products/@product.ImageFileName" alt="Image" /></td>
+                <td>@product.CreatedAt.ToString("dd.MM.yyyy")</td>
+                <td>
+                    @if (User.IsInRole("Admin"))
+                        {
+                            <a class="btn btn-primary btn-sm" asp-controller="Products" asp-action="Edit"
+                               asp-route-id="@product.Id">Edit</a>
+                            <form asp-action="Delete" asp-route-id="@product.Id" method="post" style="display:inline;" onsubmit="return confirm('Are you sure?');">
+                                <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+                            </form>
+                        }
+
+                        @if (User.IsInRole("User"))
+                        {
+                            <form asp-controller="Cart" asp-action="AddToCart" method="post" style="display:inline;">
+                                <input type="hidden" name="productId" value="@product.Id" />
+                                <button type="submit" class="btn btn-success btn-sm">Add to Cart</button>
+                            </form>
+                        }
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
