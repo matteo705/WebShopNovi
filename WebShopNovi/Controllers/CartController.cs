@@ -98,7 +98,17 @@ namespace WebShopNovi.Controllers
                 SaveCart(cart);
             }
 
-            return RedirectToAction("Index");
+            // Izračunaj ukupno za artikl i cijelu košaricu
+            var itemTotal = item != null ? item.Price * item.Quantity : 0;
+            var cartTotal = cart.Sum(c => c.Price * c.Quantity);
+
+            // Vrati podatke kao JSON za AJAX
+            return Json(new
+            {
+                quantity = item?.Quantity ?? 0,
+                itemTotal = itemTotal,
+                cartTotal = cartTotal
+            });
         }
 
         [HttpPost]
@@ -107,19 +117,29 @@ namespace WebShopNovi.Controllers
         {
             var cart = GetCart();
             var item = cart.FirstOrDefault(c => c.ProductId == productId);
-            if (item != null)
+            bool removed = false;
+            if (item != null && item.Quantity > 1)
             {
-                if (item.Quantity > 1)
-                {
-                    item.Quantity--;
-                }
-                else
-                {
-                    cart.Remove(item);
-                }
+                item.Quantity--;
                 SaveCart(cart);
             }
-            return RedirectToAction("Index");
+            else if (item != null && item.Quantity == 1)
+            {
+                cart.Remove(item);
+                SaveCart(cart);
+                removed = true;
+            }
+
+            var itemTotal = item != null ? item.Price * (item.Quantity > 0 ? item.Quantity : 0) : 0;
+            var cartTotal = cart.Sum(c => c.Price * c.Quantity);
+
+            return Json(new
+            {
+                quantity = item?.Quantity ?? 0,
+                itemTotal = itemTotal,
+                cartTotal = cartTotal,
+                removed = removed
+            });
         }
 
         [HttpGet]
