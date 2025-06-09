@@ -1,8 +1,10 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using WebShopNovi.Models;
 using WebShopNovi.Services;
-using Microsoft.AspNetCore.Authentication;
-using Microsoft.AspNetCore.Authorization;
+using static WebShopNovi.Models.ViewModel;
 
 namespace WebShopNovi.Controllers
 {
@@ -17,11 +19,36 @@ namespace WebShopNovi.Controllers
             this.context = context;
             this.environment = environment;
         }
-        public IActionResult Index()
+
+        public IActionResult Index(string category, string sortOrder, string sortDirection)
         {
-            var products = context.Products.OrderByDescending(p => p.Id).ToList();
-            return View(products);
+            var products = context.Products.AsQueryable();
+
+            if (!string.IsNullOrEmpty(category))
+                products = products.Where(p => p.Category == category);
+
+            bool desc = sortDirection == "desc";
+
+            products = sortOrder switch
+            {
+                "name" => desc ? products.OrderByDescending(p => p.Name) : products.OrderBy(p => p.Name),
+                "date" => desc ? products.OrderByDescending(p => p.CreatedAt) : products.OrderBy(p => p.CreatedAt),
+                "price" => desc ? products.OrderByDescending(p => p.Price) : products.OrderBy(p => p.Price),
+                _ => products.OrderBy(p => p.Name)
+            };
+
+            var model = new WebShopNovi.Models.ViewModel.ProductsListViewModel
+            {
+                Products = products.ToList(),
+                Categories = context.Products.Select(p => p.Category).Distinct().ToList(),
+                SelectedCategory = category,
+                SortOrder = sortOrder,
+                SortDirection = sortDirection
+            };
+
+            return View(model);
         }
+
 
         [Authorize(Roles = "Admin")]
         public IActionResult Create()
