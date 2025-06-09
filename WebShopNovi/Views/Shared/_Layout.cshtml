@@ -1,60 +1,99 @@
 ﻿<!DOCTYPE html>
 <html lang="en">
+    <style>
+    html, body {
+    height: 100%;
+}
+
+body {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+main {
+    flex: 1 0 auto;
+}
+</style>
+
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - WebShopNovi</title>
+    <title>@ViewData["Title"] - WebShop</title>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/WebShopNovi.styles.css" asp-append-version="true" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+
 </head>
+
 <body>
     <header>
-        <nav class="navbar navbar-expand-sm navbar-light bg-white border-bottom box-shadow mb-3">
+        <nav class="navbar navbar-expand-lg navbar-dark bg-primary bg-gradient shadow-sm sticky-top">
             <div class="container-fluid">
-                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">WebShopNovi</a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
+                <a class="navbar-brand d-flex align-items-center fw-bold fs-4" asp-area="" asp-controller="Home" asp-action="Index">
+                    <i class="bi bi-bag-check-fill me-2 fs-3"></i> WebShop
+                </a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                        data-bs-target="#navbarSupportedContent"
                         aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
 
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                    <ul class="navbar-nav me-auto mb-2 mb-sm-0">
+                    <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
+                            <a class="nav-link @(ViewContext.RouteData.Values["action"]?.ToString() == "Index" && ViewContext.RouteData.Values["controller"]?.ToString() == "Home" ? "active" : "")"
+                               asp-area="" asp-controller="Home" asp-action="Index">
+                                <i class="bi bi-house-door me-1"></i> Početna
+                            </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Products" asp-action="Index">Products</a>
+                            <a class="nav-link @(ViewContext.RouteData.Values["controller"]?.ToString() == "Products" ? "active" : "")"
+                               asp-area="" asp-controller="Products" asp-action="Index">
+                                <i class="bi bi-box-seam me-1"></i> Proizvodi
+                            </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+                            <a class="nav-link @(ViewContext.RouteData.Values["action"]?.ToString() == "Privacy" ? "active" : "")"
+                               asp-area="" asp-controller="Home" asp-action="Privacy">
+                                <i class="bi bi-shield-lock me-1"></i> Privatnost
+                            </a>
                         </li>
                     </ul>
 
-                    <ul class="navbar-nav">
+                    <ul class="navbar-nav ms-auto">
                         @if (User.Identity?.IsAuthenticated ?? false)
                         {
-                            <li class="nav-item">
-                                <span class="nav-link text-dark">Hello, @User.Identity.Name!</span>
+                            <li class="nav-item d-flex align-items-center me-2">
+                                <span class="nav-link text-light">
+                                    <i class="bi bi-person-circle"></i> @User.Identity.Name
+                                </span>
                             </li>
-
                             <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Manage/ChangePassword">Change Password</a>
+                                <a class="nav-link text-light" asp-area="Identity" asp-page="/Account/Manage/ChangePassword">
+                                    <i class="bi bi-key"></i> Promijeni lozinku
+                                </a>
                             </li>
-
                             <li class="nav-item">
                                 <form asp-area="Identity" asp-page="/Account/Logout" method="post" class="d-inline">
-                                    <button type="submit" class="nav-link btn btn-link text-dark" style="cursor:pointer;">Logout</button>
+                                    <button type="submit" class="nav-link btn btn-link text-light" style="cursor:pointer;">
+                                        <i class="bi bi-box-arrow-right"></i> Odjava
+                                    </button>
                                 </form>
                             </li>
                         }
                         else
                         {
                             <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Login">Login</a>
+                                <a class="nav-link text-light" asp-area="Identity" asp-page="/Account/Login">
+                                    <i class="bi bi-box-arrow-in-right"></i> Prijava
+                                </a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Register">Register</a>
+                                <a class="nav-link text-light" asp-area="Identity" asp-page="/Account/Register">
+                                    <i class="bi bi-person-plus"></i> Registracija
+                                </a>
                             </li>
                         }
                     </ul>
@@ -62,21 +101,46 @@
             </div>
         </nav>
 
+
     </header>
+    <main role="main" class="pb-3 flex-grow-1">
     <div class="container">
-        <main role="main" class="pb-3">
             @RenderBody()
         </main>
     </div>
 
-    <footer class="border-top footer text-muted">
-        <div class="container-fluid">
-            &copy; 2025 - WebShopNovi - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+    <footer class="bg-dark text-light py-4 mt-5 border-top shadow-sm">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-md-4 mb-3 mb-md-0 text-center text-md-start">
+                <h5 class="fw-bold">WebShop d.o.o.</h5>
+                <p class="mb-1">Adresa: Testna ulica 1, 10000 Zagreb</p>
+                <p class="mb-0">OIB: 12345678901</p>
+            </div>
+            <div class="col-md-4 mb-3 mb-md-0 text-center">
+                <h5 class="fw-bold">Kontakt</h5>
+                <p class="mb-1">Email: <a href="mailto:info@webshop.hr" class="text-light text-decoration-underline">info@webshop.hr</a></p>
+                <p class="mb-0">Telefon: <a href="tel:+38512345678" class="text-light text-decoration-underline">+385 1 2345 678</a></p>
+            </div>
+            <div class="col-md-4 text-center text-md-end">
+                <h5 class="fw-bold">Pratite nas</h5>
+                <a href="https://facebook.com/" class="text-light me-3" title="Facebook" target="_blank"><i class="bi bi-facebook fs-4"></i></a>
+                <a href="https://instagram.com/" class="text-light me-3" title="Instagram" target="_blank"><i class="bi bi-instagram fs-4"></i></a>
+                <a href="https://twitter.com/" class="text-light" title="Twitter" target="_blank"><i class="bi bi-twitter-x fs-4"></i></a>
+            </div>
         </div>
-    </footer>
+        <div class="text-center mt-3 small text-secondary">
+            &copy; @DateTime.Now.Year WebShop d.o.o. Sva prava pridržana.
+        </div>
+    </div>
+</footer>
+
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
     @await RenderSectionAsync("Scripts", required: false)
 </body>
+
+
+
 </html>

@@ -1,8 +1,44 @@
 ﻿@{
-    ViewData["Title"] = "Home Page";
+    ViewData["Title"] = "Dobrodošli u WebShop";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+<div class="container py-5">
+    <div class="bg-light rounded-3 shadow-sm p-5 mb-4 text-center">
+        <h1 class="fw-bold text-primary mb-3">Dobrodošli u naš WebShop!</h1>
+        <p class="fs-4 text-secondary mb-4">
+            Pronađite proizvode po svojoj mjeri – jednostavno pretražujte, filtrirajte i naručite uz samo nekoliko klikova.
+        </p>
+        <a href="/Products/Index" class="btn btn-primary btn-lg px-5">
+            <i class="bi bi-bag"></i> Pogledaj ponudu
+        </a>
+    </div>
+    <div class="row mt-5">
+        <div class="col-md-4 mb-4">
+            <div class="card h-100 shadow-sm text-center">
+                <div class="card-body">
+                    <i class="bi bi-truck fs-1 text-primary mb-3"></i>
+                    <h5 class="card-title fw-bold">Brza dostava</h5>
+                    <p class="card-text text-secondary">Sve narudžbe šaljemo unutar 24 sata na vašu adresu.</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4 mb-4">
+            <div class="card h-100 shadow-sm text-center">
+                <div class="card-body">
+                    <i class="bi bi-shield-lock fs-1 text-primary mb-3"></i>
+                    <h5 class="card-title fw-bold">Sigurna kupovina</h5>
+                    <p class="card-text text-secondary">Vaši podaci i plaćanja su zaštićeni najmodernijim standardima.</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4 mb-4">
+            <div class="card h-100 shadow-sm text-center">
+                <div class="card-body">
+                    <i class="bi bi-emoji-smile fs-1 text-primary mb-3"></i>
+                    <h5 class="card-title fw-bold">Podrška kupcima</h5>
+                    <p class="card-text text-secondary">Naš tim je uvijek spreman pomoći – kontaktirajte nas s povjerenjem!</p>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>

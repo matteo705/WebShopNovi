@@ -1,60 +1,76 @@
-﻿@model List<WebShopNovi.Models.CartItem> // ili CartItemViewModel ako koristiš view modele -->
+﻿@model List<WebShopNovi.Models.CartItem>
 
-<h2>Your Cart</h2>
+<style>
+    .product-img {
+        width: 100% !important;
+        height: 150px !important;
+        object-fit: contain !important;
+        display: block;
+        margin: 0 auto;
+    }
+    /* Centriranje PayPal gumba */
+    #paypal-button-container > div {
+        margin-left: auto !important;
+        margin-right: auto !important;
+        display: inline-block !important;
+        float: none !important;
+    }
+</style>
+
+<h2 class="text-center mb-5">Vaša košarica</h2>
 
 @if (Model == null || !Model.Any())
 {
-    <p>Your cart is empty.</p>
+    <div class="alert alert-info text-center my-5 shadow-sm fs-5">
+        Vaša košarica je prazna.
+    </div>
 }
 else
 {
-    <table class="table">
-        <thead>
-            <tr>
-                <th>Name</th>
-                <th>Price</th>
-                <th>Quantity</th>
-                <th>Total</th>
-                <th></th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var item in Model)
-            {
-                <tr>
-                    <td>@item.Name</td>
-                    <td>@item.Price €</td>
-                    <td>
-                        <form asp-controller="Cart" asp-action="DecreaseQuantity" method="post" style="display:inline;">
+    <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4 mb-4">
+        @foreach (var item in Model)
+        {
+            <div class="col">
+                <div class="card h-100 shadow-sm">
+                    @if (!string.IsNullOrEmpty(item.ImageFileName))
+                    {
+                        <img src="/products/@item.ImageFileName" class="product-img card-img-top" alt="@item.Name">
+                    }
+                    <div class="card-body d-flex flex-column">
+                        <h5 class="card-title">@item.Name</h5>
+                        <p class="card-text text-secondary mb-2">Cijena: <b>@item.Price €</b></p>
+                        <div class="d-flex align-items-center justify-content-between mb-3">
+                            <form asp-controller="Cart" asp-action="DecreaseQuantity" method="post" class="d-inline">
+                                <input type="hidden" name="productId" value="@item.ProductId" />
+                                <button type="submit" class="btn btn-outline-secondary btn-sm px-2">-</button>
+                            </form>
+                            <span class="mx-2 fs-5">@item.Quantity</span>
+                            <form asp-controller="Cart" asp-action="IncreaseQuantity" method="post" class="d-inline">
+                                <input type="hidden" name="productId" value="@item.ProductId" />
+                                <button type="submit" class="btn btn-outline-secondary btn-sm px-2">+</button>
+                            </form>
+                        </div>
+                        <p class="mb-2">Ukupno: <b>@(item.Price* item.Quantity) €</b></p>
+                        <form asp-controller="Cart" asp-action="RemoveFromCart" method="post" class="mt-auto">
                             <input type="hidden" name="productId" value="@item.ProductId" />
-                            <button type="submit" class="btn btn-secondary btn-sm">-</button>
+                            <button type="submit" class="btn btn-outline-danger btn-sm w-100">
+                                <i class="bi bi-trash"></i> Ukloni
+                            </button>
                         </form>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
 
-                        <span>@item.Quantity</span>
-
-                        <form asp-controller="Cart" asp-action="IncreaseQuantity" method="post" style="display:inline;">
-                            <input type="hidden" name="productId" value="@item.ProductId" />
-                            <button type="submit" class="btn btn-secondary btn-sm">+</button>
-                        </form>
-                    </td>
-
-                    <td>@(item.Price * item.Quantity) €</td>
-                    <td>
-                        <form asp-controller="Cart" asp-action="RemoveFromCart" method="post">
-                            <input type="hidden" name="productId" value="@item.ProductId" />
-                            <button type="submit" class="btn btn-danger btn-sm">Remove</button>
-                        </form>
-                    </td>
-                </tr>
-            }
-        </tbody>
-    </table>
-    <h4>Total: @Model.Sum(item => item.Price * item.Quantity) €</h4>
-
-    <div id="paypal-button-container"></div>
+    <div class="bg-light rounded-3 shadow-sm p-4 mb-4 text-center">
+        <h4 class="fw-bold mb-3">Ukupno za platiti: <span class="text-primary">@Model.Sum(item => item.Price * item.Quantity) €</span></h4>
+        <div class="d-flex justify-content-center">
+            <div id="paypal-button-container"></div>
+        </div>
+    </div>
 
     <script src="https://www.paypal.com/sdk/js?client-id=ATaGM0EFTTMJrDY0al4LmlEvXk4rJOE7ub_ZZ2jMRB75m7pPm5b9LvqqGqI3k3bn10ApkIJ9OTV5NzqR&currency=EUR"></script>
-
     <script>
         paypal.Buttons({
             createOrder: function(data, actions) {
@@ -69,7 +85,7 @@ else
             },
             onApprove: function(data, actions) {
                 return actions.order.capture().then(function(details) {
-                    alert('Transaction completed by ' + details.payer.name.given_name);
+                    alert('Transakcija dovršena od strane ' + details.payer.name.given_name);
                     // Ovdje možeš preusmjeriti korisnika ili poslati podatke backendu
                 });
             }

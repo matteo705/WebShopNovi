@@ -1,21 +1,30 @@
 ﻿@page
 @model LogoutModel
 @{
-    ViewData["Title"] = "Log out";
+    ViewData["Title"] = "Odjava";
 }
 
-<header>
-    <h1>@ViewData["Title"]</h1>
-    @{
-        if (User.Identity?.IsAuthenticated ?? false)
-        {
-            <form class="form-inline" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Page("/", new { area = "" })" method="post">
-                <button type="submit" class="nav-link btn btn-link text-dark">Click here to Logout</button>
-            </form>
+<div class="d-flex align-items-center justify-content-center" style="min-height: 70vh;">
+    <div class="col-12 col-sm-8 col-md-6 col-lg-4 text-center">
+        <h1 class="mb-4">@ViewData["Title"]</h1>
+        @{
+            if (User.Identity?.IsAuthenticated ?? false)
+            {
+                <form class="d-grid gap-2" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Page("/", new { area = "" })" method="post">
+                    <button type="submit" class="btn btn-lg btn-danger">
+                        <i class="bi bi-box-arrow-right me-2"></i> Odjavi me
+                    </button>
+                </form>
+            }
+            else
+            {
+                <div class="alert alert-success shadow-sm px-4 py-3 mt-4" style="font-size:1.1rem;">
+                    Uspješno ste se odjavili iz aplikacije.
+                </div>
+                <a href="/" class="btn btn-primary mt-3">
+                    <i class="bi bi-house-door me-1"></i> Povratak na početnu
+                </a>
+            }
         }
-        else
-        {
-            <p>You have successfully logged out of the application.</p>
-        }
-    }
-</header>
+    </div>
+</div>

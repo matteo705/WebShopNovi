@@ -50,7 +50,8 @@ namespace WebShopNovi.Controllers
                     ProductId = product.Id,
                     Name = product.Name,
                     Price = product.Price,
-                    Quantity = 1
+                    Quantity = 1,
+                    ImageFileName = product.ImageFileName,
                 });
             }
 
