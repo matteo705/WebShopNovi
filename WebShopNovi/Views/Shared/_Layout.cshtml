@@ -70,6 +70,15 @@ main {
                                     <i class="bi bi-person-circle"></i> @User.Identity.Name
                                 </a>
                                 <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
+                                    @if (User.IsInRole("User"))
+                                    {
+                                        <li>
+                                            <a class="dropdown-item" asp-controller="Cart" asp-action="Index">
+                                                <i class="bi bi-cart me-2"></i> Košarica
+                                            </a>
+                                        </li>
+                                        <li><hr class="dropdown-divider"></li>
+                                    }
                                     <li>
                                         <a class="dropdown-item" asp-area="Identity" asp-page="/Account/Manage/ChangePassword">
                                             <i class="bi bi-key me-2"></i> Promijeni lozinku
